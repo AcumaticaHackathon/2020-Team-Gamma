@@ -1,0 +1,24 @@
+﻿#insightIndicator {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 12px;
+}
+
+    #insightIndicator.active {
+        background-color: #39FF14;
+        opacity: 0.7;
+        box-shadow: inset 0 0 4px #000000;
+    }
+
+    #insightIndicator.idle {
+        background-color: #ff9800;
+        opacity: 0.7;
+        box-shadow: inset 0 0 4px #000000;
+    }
+
+    #insightIndicator.disabled {
+        background-color: #F5F7F8;
+        opacity: 0.7;
+    }
