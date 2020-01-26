@@ -9,6 +9,7 @@
   <col name="DocType" type="NVarChar(10)" nullable="true" />
   <col name="RefNbr" type="NVarChar(50)" nullable="true" />
   <col name="Action" type="NVarChar(1)" nullable="true" />
+  <col name="LastEditDateTime" type="SmallDateTime" nullable="true" default="CurrentDateTime" />
   <index name="PK_AIActivityLog" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
     <col name="LogID" />

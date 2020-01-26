@@ -8,11 +8,9 @@ using PX.Web.Controls;
 using PX.Common;
 using System.Web.UI.HtmlControls;
 using System.Web.Services;
-using System.Collections.Generic;
 using System.Collections;
-using PX.Common;
+using System.Collections.Generic;
 using System.Reflection;
-
 
 public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMasterPage
 {
@@ -24,16 +22,6 @@ public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMaste
 		{
 			Response.TryAddHeader("cache-control", "no-store, private");
 		}
-
-		if (!Page.IsPostBack)
-		{
-			var ds = PXPage.GetDefaultDataSource(this.Page);
-			if (ds != null)
-			{
-				ds.ClientEvents.CommandPerformed = "commandResult";
-			}
-		}
-
 	}
 
 	// We'll need this code in case we use ASP.NET standard localization
@@ -43,19 +31,146 @@ public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMaste
 
 		Page.Header.Controls.Add(new System.Web.UI.LiteralControl(
 			"<script type='text/javascript' src=\"" + ResolveUrl("~/Scripts/jquery-3.1.1.min.js") + "\"></script>"));
+
+		if (!Page.IsPostBack)
+		{
+			var ds = PXPage.GetDefaultDataSource(this.Page);
+			if (ds != null)
+			{
+				ds.ClientEvents.CommandPerformed = "commandResult";
+			}
+		}
 	}
 
 	protected void Page_Unload(object sender, EventArgs e)
 	{
 	}
 
-	[WebMethod]
-	public static void UpdateInsightLog(int idleTime, int activeTime)
-	{ 
-	
+	private List<PropertyInfo> GetPrimaryViewKeyFields(PXDataSource ds)
+	{
+		if (ds != null)
+		{
+			if (!string.IsNullOrEmpty(ds.DataGraph.PrimaryView))
+			{
+				Type primaryViewType = ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.GetItemType();
+
+				return primaryViewType.GetProperties().Where(p => p.CustomAttributes.Any(c =>
+					c.NamedArguments.Any(n => n.MemberName.Equals("IsKey")))).ToList();
+			}
+		}
+
+		return new List<PropertyInfo>();
+	}
+
+	public string GetDocTypeField()
+	{
+		PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
+		string docTypeField = string.Empty;
+
+		if (ds != null)
+		{
+			List<PropertyInfo> keyFields = GetPrimaryViewKeyFields(ds);
+
+			if (keyFields.Any())
+			{
+				IEnumerable<PropertyInfo> docTypeFields = keyFields.
+					Where(f => f.Name.Contains("DocType", StringComparison.OrdinalIgnoreCase) ||
+						f.Name.Contains("OrderType", StringComparison.OrdinalIgnoreCase));
+
+				if (docTypeFields.Any())
+					docTypeField = docTypeFields.First().Name;
+			}
+		}
+		
+		return docTypeField;
+	}
+
+	public string GetRefNbrFieldValue()
+	{
+		PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
+		object refNbrField = string.Empty;
+
+		if (ds != null)
+		{
+			List<PropertyInfo> keyFields = GetPrimaryViewKeyFields(ds);
+
+			if (keyFields.Any())
+			{
+				List<PropertyInfo> refNbrFields = keyFields.
+					Where(f => f.Name.Contains("RefNbr", StringComparison.OrdinalIgnoreCase) ||
+						f.Name.Contains("OrderNbr", StringComparison.OrdinalIgnoreCase)).ToList();
+
+				if (refNbrFields.Any() && ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.Current != null)
+				{
+					refNbrField = refNbrFields.First().GetValue(
+						ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.Current);
+				}
+			}
+		}
+		return refNbrField == null ? string.Empty : refNbrField.ToString();
+	}
+
+	public string GetDocTypeFieldValue()
+	{
+		PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
+		string docTypeField = string.Empty;
+
+		if (ds != null)
+		{
+			List<PropertyInfo> keyFields = GetPrimaryViewKeyFields(ds);
+
+			if (keyFields.Any())
+			{
+				List<PropertyInfo> docTypeFields = keyFields.
+					Where(f => f.Name.Contains("DocType", StringComparison.OrdinalIgnoreCase) ||
+						f.Name.Contains("OrderType", StringComparison.OrdinalIgnoreCase)).ToList();
+
+				if (docTypeFields.Any())
+					docTypeField = docTypeFields.First().Name;
+			}
+		}
+
+		return docTypeField;
+	}
+
+	public string GetRefNbrField()
+	{
+		PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
+		string refNbrField = string.Empty;
+
+		if (ds != null)
+		{
+			List<PropertyInfo> keyFields = GetPrimaryViewKeyFields(ds);
+
+			if (keyFields.Any())
+			{
+				IEnumerable<PropertyInfo> docTypeFields = keyFields.
+					Where(f => f.Name.Contains("RefNbr", StringComparison.OrdinalIgnoreCase) ||
+						f.Name.Contains("OrderNbr", StringComparison.OrdinalIgnoreCase));
+
+				if (docTypeFields.Any())
+					refNbrField = docTypeFields.First().Name;
+			}
+		}
+		return refNbrField;
 	}
 
 	#region Public properties
+	public string DocTypeField
+	{
+		get { return GetDocTypeField(); }
+	}
+
+	public string RefNbrFieldValue
+	{
+		get { return GetRefNbrFieldValue(); }
+	}
+
+	public string RefNbrField
+	{
+		get { return GetRefNbrField(); }
+	}
+
 	public string UserID
 	{
 		get { return PXPage.GetDefaultDataSource(this.Page).DataGraph.Accessinfo.UserID.ToString(); }
@@ -66,44 +181,10 @@ public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMaste
 		get { return ScreenID.Replace(".", ""); }
 	}
 
-    public string UserAction
-    {
-        get
-        {
-            PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
-            string action = string.Empty;
-            List<PropertyInfo> pInfo = null;
-            string insertedValue = null;
-
-
-            if (ds != null)
-            {
-                if (!string.IsNullOrEmpty(ds.DataGraph.PrimaryView))
-                {
-                    Type primaryViewType = ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.GetItemType();
-
-                    pInfo = primaryViewType.GetProperties().Where(p => p.Name.Contains("UsrInserted", StringComparison.OrdinalIgnoreCase)).ToList(); 
-                }
-
-                if ((pInfo != null) && (pInfo.Any()))
-                {
-                    IEnumerable<PropertyInfo> usrInsertedFields = pInfo.
-                           Where(f => f.Name.Contains("UsrInserted", StringComparison.OrdinalIgnoreCase));
-
-                    if (usrInsertedFields.Any())
-                        insertedValue = (string) usrInsertedFields.First().GetValue(ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.Current);
-                }
-            }
-
-            return insertedValue;
-
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the screen title string.
-    /// </summary>
-    public string ScreenTitle
+	/// <summary>
+	/// Gets or sets the screen title string.
+	/// </summary>
+	public string ScreenTitle
 	{
 		get { return this.usrCaption.ScreenTitle; }
 		set { this.usrCaption.ScreenTitle = value; }

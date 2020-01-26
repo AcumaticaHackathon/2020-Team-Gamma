@@ -33,16 +33,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PX.Common">
-      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Common.dll</HintPath>
+      <HintPath>..\..\..\..\Hackathon2020\Bin\PX.Common.dll</HintPath>
     </Reference>
     <Reference Include="PX.CS.Contracts">
-      <HintPath>..\..\..\..\..\..\..\..\18.200.0075\Unpacked\Acumatica ERP\C075732\Bin\PX.CS.Contracts.dll</HintPath>
+      <HintPath>..\..\..\..\Hackathon2020\Bin\PX.CS.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="PX.Data">
-      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Data.dll</HintPath>
+      <HintPath>..\..\..\..\Hackathon2020\Bin\PX.Data.dll</HintPath>
     </Reference>
     <Reference Include="PX.Objects">
-      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Objects.dll</HintPath>
+      <HintPath>..\..\..\..\Hackathon2020\Bin\PX.Objects.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -54,8 +54,14 @@
     <Compile Include="DAC\AIActivityLog.cs" />
     <Compile Include="Constants\AIMessages.cs" />
     <Compile Include="DAC\ARInvoiceExt.cs" />
+    <Compile Include="DAC\SOInvoiceExt.cs" />
+    <Compile Include="DAC\SOOrderExt.cs" />
+    <Compile Include="DAC\SOShipmentExt.cs" />
     <Compile Include="Graphs\ARInvoiceEntryExt.cs" />
     <Compile Include="Graphs\PX\AIPXGraphExt.cs" />
+    <Compile Include="Graphs\SOInvoiceEntryExt.cs" />
+    <Compile Include="Graphs\SOOrderEntryExt.cs" />
+    <Compile Include="Graphs\SOShipmentEntryExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -15,9 +15,9 @@ namespace ACUInsights
             ARInvoiceExt row1 = PXCache<ARInvoice>.GetExtension<ACUInsights.ARInvoiceExt>(row);
 
             if (row.RefNbr ==  " <NEW>")
-                row1.UsrInserted = "In";
+                row1.UsrInserted = "I";
             else
-                row1.UsrInserted = "Up";
+                row1.UsrInserted = "U";
         }
     }
 }

@@ -34,56 +34,73 @@
         <%--		<px:PXStatusBar ID="statusBar" runat="server" Width="100%">
 		</px:PXStatusBar>
         --%>
+        
     </form>
-    <script type="text/javascript">
-        var activeInterval = null;
+    <%--<script type="text/javascript">
+        var acuInsightInterval = null;
         var activeTime = 0;
-        var idleInterval = null;
         var idleTime = 0;
         var screenId = "<%= FormattedScreenID%>";
         var userId = "<%= UserID%>";
-        var action = "<%= UserAction%>";
-
-
-        function onFocus() {
-            if (idleInterval !== null)
-                clearInterval(idleInterval);
-
-            activeInterval = setInterval(function () {
+        
+        acuInsightInterval = setInterval(function () {
+            if (document.hasFocus()) {
                 activeTime++;
-            }, 1000);
-            document.getElementById("insightIndicator").className = "active";
-        }
-
-        function onBlur() {
-            if (activeInterval !== null)
-                clearInterval(activeInterval);
-
-            idleInterval = setInterval(function () {
+                document.getElementById("insightIndicator").className = "active";
+            }
+            else {
                 idleTime++;
-            }, 1000);
-            document.getElementById("insightIndicator").className = "idle";
-        }
+                document.getElementById("insightIndicator").className = "idle";
+            }
+        }, 1000);
 
-        function onUnload() {
-            debugger;
+        function postLog() {
+            console.log(refNbrValue);
+
             $.ajax({
                 type: "POST",
-                url: "/Api/ACUInsightService.asmx/AddLog",
-                data: JSON.stringify({ "activeTime": activeTime, "idleTime": idleTime, "screenId": screenId, "userId": userId, "action": action }),
+                url: "http://hackathon.acumatica.com/HackGamma/Api/ACUInsightService.asmx/AddLog", 
+                //url: "/Api/ACUInsightService.asmx/AddLog",
+                data: JSON.stringify({
+                    "activeTime": activeTime, "idleTime": idleTime,
+                    "screenId": screenId, "userId": userId, "refNbr": refNbrVal,
+                    "docType": "INV"
+                }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                async: false
+                async: false,
+                success: function () {
+                    activeTime = 0;
+                    idleTime = 0;
+                }
             });
         }
 
-        function commandResult(ds, context) {
-            //debugger;
+        function onUnload() {
+            postLog();
         }
 
-        window.addEventListener("focus", onFocus);
-        window.addEventListener("blur", onBlur);
+        $(".main-PagePrev").click(function () {
+            postLog();
+        });
+
+        $(".main-PageFirst").click(function () {
+            postLog();
+        });
+
+        $(".main-PageNext").click(function () {
+            postLog();
+        });
+
+        $(".main-PageLast").click(function () {
+            postLog();
+        });
+
+        function commandResult(ds, context) {
+
+        }
+
         window.addEventListener("unload", onUnload);
-    </script>
+    </script>--%>
 </body>
 </html>
