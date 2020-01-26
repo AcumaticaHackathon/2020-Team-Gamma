@@ -53,5 +53,11 @@ namespace ACUInsights
         public virtual string Action { get; set; }
         public abstract class action : PX.Data.BQL.BqlString.Field<refNbr> { }
         #endregion
+        #region LastEditDateTime
+        [PXDBDate()]
+        [PXUIField(DisplayName = "Last Edit Date")]
+        public virtual DateTime? LastEditDateTime { get; set; }
+        public abstract class lastEditDateTime : PX.Data.BQL.BqlDateTime.Field<lastEditDateTime> { }
+        #endregion
     }
 }
