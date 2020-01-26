@@ -24,12 +24,13 @@ public class ACUInsightService : System.Web.Services.WebService
     }
 
     [WebMethod]
-    public bool AddLog(int activeTime, int idleTime, string screenId, string userId)
+    public bool AddLog(int activeTime, int idleTime, string screenId, string userId, string action)
     {
         PXDatabase.Insert<AIActivityLog>(new PXDataFieldAssign<AIActivityLog.activeTime>(activeTime),
             new PXDataFieldAssign<AIActivityLog.idleTime>(idleTime),
             new PXDataFieldAssign<AIActivityLog.screenID>(screenId),
-            new PXDataFieldAssign<AIActivityLog.userID>(userId));
+            new PXDataFieldAssign<AIActivityLog.userID>(userId),
+            new PXDataFieldAssign<AIActivityLog.action>(action));
 
         return true;
     }

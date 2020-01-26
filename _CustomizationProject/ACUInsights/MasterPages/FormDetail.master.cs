@@ -8,6 +8,11 @@ using PX.Web.Controls;
 using PX.Common;
 using System.Web.UI.HtmlControls;
 using System.Web.Services;
+using System.Collections.Generic;
+using System.Collections;
+using PX.Common;
+using System.Reflection;
+
 
 public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMasterPage
 {
@@ -61,10 +66,44 @@ public partial class MasterPages_FormDetail : PX.Web.UI.BaseMasterPage, IPXMaste
 		get { return ScreenID.Replace(".", ""); }
 	}
 
-	/// <summary>
-	/// Gets or sets the screen title string.
-	/// </summary>
-	public string ScreenTitle
+    public string UserAction
+    {
+        get
+        {
+            PXDataSource ds = PXPage.GetDefaultDataSource(this.Page);
+            string action = string.Empty;
+            List<PropertyInfo> pInfo = null;
+            string insertedValue = null;
+
+
+            if (ds != null)
+            {
+                if (!string.IsNullOrEmpty(ds.DataGraph.PrimaryView))
+                {
+                    Type primaryViewType = ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.GetItemType();
+
+                    pInfo = primaryViewType.GetProperties().Where(p => p.Name.Contains("UsrInserted", StringComparison.OrdinalIgnoreCase)).ToList(); 
+                }
+
+                if ((pInfo != null) && (pInfo.Any()))
+                {
+                    IEnumerable<PropertyInfo> usrInsertedFields = pInfo.
+                           Where(f => f.Name.Contains("UsrInserted", StringComparison.OrdinalIgnoreCase));
+
+                    if (usrInsertedFields.Any())
+                        insertedValue = (string) usrInsertedFields.First().GetValue(ds.DataGraph.Views[ds.DataGraph.PrimaryView].Cache.Current);
+                }
+            }
+
+            return insertedValue;
+
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the screen title string.
+    /// </summary>
+    public string ScreenTitle
 	{
 		get { return this.usrCaption.ScreenTitle; }
 		set { this.usrCaption.ScreenTitle = value; }

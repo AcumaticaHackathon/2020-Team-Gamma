@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ACUInsightsExtLib</RootNamespace>
     <AssemblyName>ACUInsightsExtLib</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -32,23 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PX.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b136cac2f602b8e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Hackathon2020\Bin\PX.Common.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="PX.Common">
+      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Common.dll</HintPath>
     </Reference>
     <Reference Include="PX.CS.Contracts">
-      <HintPath>..\..\..\Hackathon2020\Bin\PX.CS.Contracts.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\18.200.0075\Unpacked\Acumatica ERP\C075732\Bin\PX.CS.Contracts.dll</HintPath>
     </Reference>
-    <Reference Include="PX.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b136cac2f602b8e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Hackathon2020\Bin\PX.Data.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="PX.Data">
+      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Data.dll</HintPath>
     </Reference>
-    <Reference Include="PX.Objects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Hackathon2020\Bin\PX.Objects.DLL</HintPath>
-      <Private>False</Private>
+    <Reference Include="PX.Objects">
+      <HintPath>..\..\..\..\..\..\..\..\..\repos\code\WebSites\Pure\Site\Bin\PX.Objects.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -59,6 +53,8 @@
   <ItemGroup>
     <Compile Include="DAC\AIActivityLog.cs" />
     <Compile Include="Constants\AIMessages.cs" />
+    <Compile Include="DAC\ARInvoiceExt.cs" />
+    <Compile Include="Graphs\ARInvoiceEntryExt.cs" />
     <Compile Include="Graphs\PX\AIPXGraphExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

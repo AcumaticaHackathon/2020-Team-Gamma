@@ -42,6 +42,7 @@
         var idleTime = 0;
         var screenId = "<%= FormattedScreenID%>";
         var userId = "<%= UserID%>";
+        var action = "<%= UserAction%>";
 
 
         function onFocus() {
@@ -69,7 +70,7 @@
             $.ajax({
                 type: "POST",
                 url: "/Api/ACUInsightService.asmx/AddLog",
-                data: JSON.stringify({ "activeTime": activeTime, "idleTime": idleTime, "screenId": screenId, "userId": userId }),
+                data: JSON.stringify({ "activeTime": activeTime, "idleTime": idleTime, "screenId": screenId, "userId": userId, "action": action }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false
